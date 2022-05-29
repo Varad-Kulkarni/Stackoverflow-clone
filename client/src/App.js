@@ -1,0 +1,28 @@
+import logo from './logo.svg';
+import './App.css';
+import Navbar from './components/Navbar';
+import {BrowserRouter as Router} from 'react-router-dom';
+import AllRoutes from './AllRoutes';
+import { useEffect } from 'react';
+import { fetchAllQuestions } from '../src/actions/question'
+import { useDispatch } from 'react-redux';
+
+function App() {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchAllQuestions());
+  }, [dispatch])
+
+  return (
+    <div className="App">
+      <Router>
+        <Navbar />
+        <AllRoutes/>
+      </Router>
+    </div>
+  );
+}
+
+export default App;
