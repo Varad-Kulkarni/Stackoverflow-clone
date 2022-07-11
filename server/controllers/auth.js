@@ -4,7 +4,7 @@ import users from '../models/auth.js'
 
 export const signup = async (req, res) => {
     const { name, email, password } = req.body;
-    console.log("Inside cantrollers ",req.body);
+    // console.log("Inside cantrollers ",req.body);
     try{
         const existinguser = await users.findOne({ email });
         if(existinguser){

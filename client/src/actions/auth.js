@@ -4,9 +4,9 @@ import { setCurrentUser } from './currentUser'
 export const signup = (authData, navigate) => async (dispatch) => {
 
     try {
-        console.log(authData);
+        // console.log(authData);
         const { data } = await api.signUp(authData)
-        console.log("inside signup");
+        // console.log("inside signup");
         dispatch({ type: 'AUTH', data})
         dispatch(setCurrentUser(JSON.parse(localStorage.getItem('Profile'))))
         navigate('/');
