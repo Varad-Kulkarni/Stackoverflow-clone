@@ -24,18 +24,6 @@ export const fetchAllQuestions = () => async (dispatch) => {
   }
 }
 
-// export const postAnswer = (answerData) => async (dispatch) => {
-//   try {
-//   const { id, noOfAnswers, answerBody, userPosted } = answerData
-//   const { data } = await api.postAnswer(id, noOfAnswers, answerBody, userPosted)
-//   dispatch({ type: 'POST_ANSWERS', payload: data });
-//   dispatch(fetchAllQuestions)
-//   }
-//   catch(err) {
-//     console.log(err);
-//   }
-// }
-
 export const postAnswer = (answerData) => async (dispatch) => {
   try {
       const { id, noOfAnswers, answerBody, userAnswered } = answerData;
@@ -61,8 +49,18 @@ export const deleteQuestion = (id, navigate) => async(dispatch) => {
 export const deleteAnswer = (id, answerId, noOfAnswers) => async(dispatch) => {
   try {
     const { data } = await api.deleteAnswer(id, answerId, noOfAnswers);
+    // dispatch(fetchAllQuestions());
     dispatch(fetchAllQuestions());
   } catch (error) {
     
+  }
+}
+
+export const voteQuestion = (id, value, userId) => async (dispatch) => {
+  try {
+    const { data } = api.voteQuestion(id, value, userId)
+    dispatch(fetchAllQuestions())
+  } catch (error) {
+    console.log(error);
   }
 }

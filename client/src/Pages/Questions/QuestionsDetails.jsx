@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { postAnswer } from '../../actions/question';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
-import { deleteQuestion } from '../../actions/question';
+import { deleteQuestion, voteQuestion } from '../../actions/question';
 
 const QuestionsDetails = () => {
 
@@ -106,6 +106,14 @@ const QuestionsDetails = () => {
         dispatch(deleteQuestion(id, Navigate))
     }
 
+    const handleUpVote = () => {
+        dispatch(voteQuestion(id, 'upVote', User.result._id))
+    }
+
+    const handleDownVote = () => {
+        dispatch(voteQuestion(id, 'downVote', User.result._id))
+    }
+
     return (
         <div className='question-details-page'>
             {
@@ -119,9 +127,9 @@ const QuestionsDetails = () => {
                                         <h1>{question.questionTitle}</h1>
                                         <div className="question-details-container-2">
                                             <div className='question-votes'>
-                                                <img src={upvote} alt="" className='votes-icon' width='18' />
-                                                <p>{question.upVotes - question.downVotes}</p>
-                                                <img src={downvote} alt="" className='votes-icon' width='18' />
+                                                <img src={upvote} alt="" className='votes-icon' onClick={handleUpVote} width='18' />
+                                                <p>{question.upVote.length - question.downVote.length}</p>
+                                                <img src={downvote} alt="" className='votes-icon' onClick={handleDownVote} width='18' />
                                             </div>
 
                                             <div style={{ width: "100%" }}>
@@ -147,7 +155,7 @@ const QuestionsDetails = () => {
                                                     </div>
                                                     <div>
                                                         <p>asked {moment(question.postedOn).fromNow()}</p>
-                                                        <Link to={`/User/${question.userId}`} className='user-link' style={{ color: '#0086d8' }}>
+                                                        <Link to={`/Users/${question.userId}`} className='user-link' style={{ color: '#0086d8' }}>
                                                             <Avatar backgroundColor="orange" px='8px' py='5px'>
                                                                 {question.userPosted.charAt(0).toUpperCase()}
                                                             </Avatar>
