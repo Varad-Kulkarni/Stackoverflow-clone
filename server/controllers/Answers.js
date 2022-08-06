@@ -3,7 +3,9 @@ import Questions from '../models/Questions.js'
 
 export const postAnswer = async(req, res) => {
     const { id: _id } = req.params;
-    const { noOfAnswers, answerBody, userAnswered, userId } = req.body;
+    // const { noOfAnswers, answerBody, userAnswered, userId } = req.body;
+    const { noOfAnswers, answerBody, userAnswered, userId, dob } = req.body;
+    // console.log(req.body);
     // const userId = req.userId;
 
 
@@ -14,7 +16,7 @@ export const postAnswer = async(req, res) => {
     updateNoOfQuestions(_id, noOfAnswers)
     try {
         // const updatedQuestion = await Questions.findByIdAndUpdate( _id, { $addToSet: {'answer': [{ answerBody, userAnswered, userId: req.userId }]}})
-        const updatedQuestion = await Questions.findByIdAndUpdate( _id, { $addToSet: {'answer': [{ answerBody, userAnswered, userId}]}})
+        const updatedQuestion = await Questions.findByIdAndUpdate( _id, { $addToSet: {'answer': [{ answerBody, userAnswered, userId, dob}]}})
         res.status(200).json(updatedQuestion)
     } catch (error) {
         res.status(400).json('error in updating')

@@ -6,7 +6,7 @@ const ProfileBio = ({ currentProfile }) => {
         <div>
             <div>
                 {
-                    currentProfile?.tags === [] ? (
+                    currentProfile?.tags !== [] ? (
                         <>
                             <h4>Tags watched</h4>
                             {
@@ -24,14 +24,44 @@ const ProfileBio = ({ currentProfile }) => {
                 {
                     currentProfile?.about ? (
                         <>
-                           <h4>about</h4>
-                           <p>{currentProfile?.about}</p>
+                            <h4>about</h4>
+                            <p>{currentProfile?.about}</p>
                         </>
                     ) : (
                         <p>No bio found</p>
                     )
                 }
             </div>
+
+            {/* <div>
+                {
+                    currentProfile?.address ? (
+                        <>
+                           <h4>Address</h4>
+                           <p>{currentProfile?.address}</p>
+                           {console.log(currentProfile)}
+                        </>
+                    ) : (
+                        <p>No {currentProfile?.address}</p>
+                    )
+                }
+            </div> */}
+
+            <div>
+                {
+                    currentProfile?.address !== null ? (
+                        <>
+                            <h4>Address
+                                {/* {console.log(currentProfile)} */}
+                            </h4>
+                            <p>{currentProfile?.address}</p>
+                        </>
+                    ) : (
+                        <p>No address found</p>
+                    )
+                }
+            </div>
+
         </div>
     )
 }

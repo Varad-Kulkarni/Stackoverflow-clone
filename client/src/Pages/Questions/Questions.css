@@ -122,3 +122,56 @@
     line-height: 18px;
     white-space: pre-line;
 }
+
+.age-user{
+    margin: 0;
+    padding: 0;
+    padding-left: 36px;
+    text-decoration: none;
+    font-size: 14px;
+    color: #878787;
+}
+
+.post-comment-container form textarea{
+    padding: 10px;
+    border: solid 1px rgba(0, 0, 0, 0.3);
+    font-family: 'Roboto', sans-serif;
+    width: calc(100% - 137px);
+    resize: vertical;
+    margin-left: 114px;
+}
+
+.post-comment-container form .post-ans-btn{
+    /* margin: 20px 0px;
+    padding: 10px 10px; */
+    margin: 12px 0px;
+    padding: 5px 10px;
+    background-color: #009dff;
+    color: white;
+    border: solid 1px #009dff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.5s all;
+    margin-left: 114px;
+}
+
+.post-comment-container form .post-comment-btn:hover{
+    background-color: #0086d8;
+}
+
+.comment-h5, .comment-p, .comment-h4, .comment-div {
+    margin-left: 114px;
+    /* margin-bottom: -5px; */
+    margin-bottom: 0px;
+}
+
+.comment-h5{
+    margin-bottom: 2px;
+}
+
+.comment-hr{
+    border: none;
+    height: 1px;
+    color: rgb(232, 231, 231); 
+    background-color: rgb(235, 235, 235); 
+}

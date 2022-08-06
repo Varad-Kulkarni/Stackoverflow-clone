@@ -46,16 +46,17 @@
 
 .auth-container-2 form label:nth-child(1) h4,
 .auth-container-2 form label:nth-child(2) h4,
-.auth-container-2 form label:nth-child(3) h4{
+.auth-container-2 form label:nth-child(3) h4
+.auth-container-2 form label:nth-child(4) h4{
     margin-bottom: 5px;
     margin-top: 10px;
 }
 
-.auth-container-2 form label:nth-child(4){
+.auth-container-2 form label:nth-child(5){
     display: flex;
 }
 
-.auth-container-2 form label:nth-child(4) input{
+.auth-container-2 form label:nth-child(5) input{
     width: 15%;
     margin: 13px 0px;
 }

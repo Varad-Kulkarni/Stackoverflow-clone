@@ -5,10 +5,16 @@ const questionsReducer = (state = {data: null}, action) => {
             return{ ...state };
 
         case "POST_ANSWERS":
-            return { ...state }
+            return { ...state };
+
+        case "POST_COMMENTS":
+            return { ...state };
+
+        case "EDIT_COMMENTS":
+            return { ...state }; 
 
         case "FETCH_ALL_QUESTIONS":
-            return { ...state, data: action.payload}
+            return { ...state, data: action.payload};
         
         default:
             return state

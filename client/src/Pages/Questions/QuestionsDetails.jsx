@@ -10,6 +10,8 @@ import { postAnswer } from '../../actions/question';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
 import { deleteQuestion, voteQuestion } from '../../actions/question';
+import DisplayQComments from './DisplayQComments';
+import { postQComment } from '../../actions/question';
 
 const QuestionsDetails = () => {
 
@@ -74,32 +76,51 @@ const QuestionsDetails = () => {
     // }]
 
     const [Answer, setAnswer] = useState('')
+    const [Comments, setComments] = useState('')
     const Navigate = useNavigate();
     const dispatch = useDispatch();
     const User = useSelector((state) => (state.currentUserReducer))
     const location = useLocation();
-    const url = 'https://stack-overflow-clone-varad.herokuapp.com';
+    // const url = 'https://stack-overflow-clone-varad.herokuapp.com';
+    const url = 'https://stack-overflow-clone-varad.netlify.app';
+    // const url = 'http://localhost:3000';
 
     const handlePostAns = (e, answerLength) => {
         e.preventDefault();
-        if(User === null) {
+        if (User === null) {
             alert("login or signup to answer");
             Navigate('/Auth');
         }
         else {
-            if(Answer === '') {
+            if (Answer === '') {
                 alert('Enter an answer before submitting');
             }
             else {
-                // dispatch(postAnswer({ id, noOfAnswers: answerLength + 1, answerBody: Answer, userPosted: User.result.name }))
-                dispatch(postAnswer({ id, noOfAnswers: answerLength + 1, answerBody: Answer, userAnswered: User.result.name, userId: User.result._id }))
+                dispatch(postAnswer({ id, noOfAnswers: answerLength + 1, answerBody: Answer, userAnswered: User.result.name, userId: User?.result?._id, dob: User?.result?.dob }))
+            }
+        }
+    }
+
+    const handlePosComment = (e, commentLength) => {
+        e.preventDefault();
+        if(User === null) {
+            alert("login or signup to comment");
+            Navigate('/Auth');
+        }
+        else {
+            if(Comments === '') {
+                alert('Enter a comment before submitting');
+            }
+            else {
+                // console.log(id+ " " +(commentLength+1)+ " " +Comment + " " + User.result.name)
+                dispatch(postQComment({ id, noOfComment: commentLength+1, commentBody: Comments, userCommented: User.result.name, userId: User?.result?._id, commentedOn: Date.now() }))
             }
         }
     } 
 
     const handleShare = () => {
-        copy(url+location.pathname);
-        alert('Copied URL : ' + url+location.pathname);
+        copy(url + location.pathname);
+        alert('Copied URL : ' + url + location.pathname);
     }
 
     const handleDelete = () => {
@@ -113,6 +134,12 @@ const QuestionsDetails = () => {
     const handleDownVote = () => {
         dispatch(voteQuestion(id, 'downVote', User.result._id))
     }
+
+    const getAge = (date) => {
+        var birthday = +new Date(date);
+        return ~~((Date.now() - birthday) / (31557600000));
+    }
+
 
     return (
         <div className='question-details-page'>
@@ -143,7 +170,7 @@ const QuestionsDetails = () => {
                                                 </div>
                                                 <div className="question-actions-user">
                                                     <div>
-                                                        <button type='button' onClick = {handleShare}>Share</button>
+                                                        <button type='button' onClick={handleShare}>Share</button>
 
                                                         {
                                                             User?.result?._id === question?.userId && (
@@ -163,10 +190,33 @@ const QuestionsDetails = () => {
                                                                 {question.userPosted}
                                                             </div>
                                                         </Link>
+                                                        <div className="age-user"> {getAge(question.dob)} years old</div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+
+                                        {
+                                            question.noOfComment !== 0 && (
+                                                <section>
+                                                    <h4 className="comment-h4">
+                                                        {/* {ans.noOfComments} comments */}
+                                                        {question.noOfComment} comments
+                                                    </h4>
+                                                    <DisplayQComments key={question._id} question={question} questionId={id} />
+
+                                                </section>
+                                            )
+                                        }
+
+                                        <section className='post-comment-container'>
+                                            <h5 className="comment-h5">Add Comment</h5>
+                                            <form onSubmit={(e) => { handlePosComment(e, question.comments.length) }}>
+                                                <textarea name="" id="" cols="30" rows="2" onChange={e => setComments(e.target.value)}></textarea>
+                                                <input type="submit" className='post-ans-btn' value='Post Your Comment' />
+                                            </form>
+                                        </section>
+
                                     </section>
                                     {
                                         question.noOfAnswers !== 0 && (
@@ -175,13 +225,14 @@ const QuestionsDetails = () => {
                                                     {question.noOfAnswers} answers
                                                 </h3>
                                                 <DisplayAnswer key={question._id} question={question} handleShare={handleShare} />
+
                                             </section>
                                         )
                                     }
                                     <section className='post-ans-container'>
                                         <h3>Your Answer</h3>
                                         <form onSubmit={(e) => { handlePostAns(e, question.answer.length) }}>
-                                            <textarea name="" id="" cols="30" rows="10" onChange = {e => setAnswer(e.target.value)}></textarea>
+                                            <textarea name="" id="" cols="30" rows="10" onChange={e => setAnswer(e.target.value)}></textarea>
                                             <input type="submit" className='post-ans-btn' value='Post Your Answer' />
                                         </form>
                                         <p>
