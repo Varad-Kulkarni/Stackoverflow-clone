@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { push } from 'react-router-redux';
 
 import './Auth.css'
 import icon from '../../assets/icon.png'
@@ -36,6 +37,7 @@ const Auth = () => {
                 alert("Enter Date-of-birth");
             }
             dispatch(signup({ name, email, password, dob }, navigate))
+            // browserHistory.push('')
         } else {
             dispatch(login({ email, password }, navigate))
         }
