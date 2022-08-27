@@ -51,7 +51,7 @@ const ProfileBio = ({ currentProfile }) => {
                 {
                     currentProfile?.address !== null ? (
                         <>
-                            <h4>Address
+                            <h4>Your Last Location
                                 {/* {console.log(currentProfile)} */}
                             </h4>
                             <p>{currentProfile?.address}</p>

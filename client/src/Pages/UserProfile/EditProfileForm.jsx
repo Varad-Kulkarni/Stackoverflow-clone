@@ -5,8 +5,9 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { updateProfile } from '../../actions/users'
+// import { Map, InfoWindow, Marker, GoogleApiWrapper, mapStyles } from 'google-maps-react';
 
-import Geocoder from "react-geocode";
+// import Geocoder from "react-geocode";
 
 
 const EditProfileForm = ({ currentUser, setSwitch }) => {
@@ -14,6 +15,7 @@ const EditProfileForm = ({ currentUser, setSwitch }) => {
     const [name, setName] = useState(currentUser?.result?.name)
     const [about, setAbout] = useState(currentUser?.result?.about)
     const [address, setAddress] = useState('')
+    const [addr, setAddr] = useState('click here to get location'); 
     // const [address, setAddress] = useState(currentUser?.result?.address)
     const [tags, setTags] = useState('')
     const dispatch = useDispatch()
@@ -34,10 +36,36 @@ const EditProfileForm = ({ currentUser, setSwitch }) => {
         // }
 
         if (tags.length === 0) {
-            dispatch(updateProfile(currentUser?.result?._id, { name, about, tags: currentUser?.result?.tags, address }))
+            // address = addr;
+            // setAddress(addr);
+            // console.log(address + "aallaa");
+            // console.log(addr);
+            var str = 'click here to get location';
+            if(str === addr) {
+                dispatch(updateProfile(currentUser?.result?._id, { name, about, tags: currentUser?.result?.tags, address: '' }))
+            }
+            else {
+                dispatch(updateProfile(currentUser?.result?._id, { name, about, tags: currentUser?.result?.tags, address: addr }))
+            }
+            // console.log(str === addr)
+            // dispatch(updateProfile(currentUser?.result?._id, { name, about, tags: currentUser?.result?.tags, address: addr }))
+            // dispatch(updateProfile(currentUser?.result?._id, { name, about, tags: currentUser?.result?.tags, addr }))
         }
         else {
-            dispatch(updateProfile(currentUser?.result?._id, { name, about, tags, address }))
+            // address = addr;
+            // setAddress(addr);
+            // console.log(address + "aaa");
+            // console.log(addr);
+            var str = 'click here to get location';
+            if(str === addr) {
+                dispatch(updateProfile(currentUser?.result?._id, { name, about, tags, address: '' }))
+            }
+            else {
+                dispatch(updateProfile(currentUser?.result?._id, { name, about, tags, address: addr }))
+            }
+            // console.log(str === addr);
+            // dispatch(updateProfile(currentUser?.result?._id, { name, about, tags, address: addr }))
+            // dispatch(updateProfile(currentUser?.result?._id, { name, about, tags, addr }))
         }
         setSwitch(false)
     }
@@ -50,13 +78,56 @@ const EditProfileForm = ({ currentUser, setSwitch }) => {
             navigator.geolocation.getCurrentPosition(function (position) {
                 var lat = position.coords.latitude;
                 var lng = position.coords.longitude;
-                alert("Your latitude is " + lat + "& Your longitude is " + lng)
+                // console.log("Your latitude is " + lat + "& Your longitude is " + lng)
+                getCity(lat, lng);
+
+                function getCity(lat, lng) {
+                    var xhr = new XMLHttpRequest();
+                  
+                    xhr.open('GET', "https://us1.locationiq.com/v1/reverse.php?key=pk.188cbd0b98282533420003d27362f7b5&lat=" +
+                    lat + "&lon=" + lng + "&format=json", true);
+                    xhr.send();
+                    // xhr.onreadystatechange = processRequest;
+                    xhr.addEventListener("readystatechange", processRequest, false);
+                  
+                    function processRequest(e) {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            var city = response.address.city;
+                            var state = response.address.state;
+                            var country = response.address.country;
+                            // console.log(response.address);
+                            // alert("Your current location is " + city + ", "+ state + ", " + country);
+                            const addrr = city + ", " + state + ", " + country; 
+                            setAddr(addrr);
+                            // console.log(addrr);
+                            return;
+                        }
+                    }
+                }
+
             }, function error(error_message) {
                 // for when getting location results in an error
                 alert('Error occured, Probably you turn off location', error_message)
             });
         }
     }
+
+    // const getLocation = () => {
+    //     if (!navigator.geolocation) {
+    //         alert("Your browzer is not supporting");
+    //     }
+    //     else {
+    //         navigator.geolocation.getCurrentPosition(function (position) {
+    //             var lat = position.coords.latitude;
+    //             var lng = position.coords.longitude;
+    //             alert("Your latitude is " + lat + "& Your longitude is " + lng)
+    //         }, function error(error_message) {
+    //             // for when getting location results in an error
+    //             alert('Error occured, Probably you turn off location', error_message)
+    //         });
+    //     }
+    // }
 
     return (
         <div>
@@ -81,19 +152,48 @@ const EditProfileForm = ({ currentUser, setSwitch }) => {
                     <input type="text" id='tags' onChange={(e) => setTags(e.target.value.split(' '))} />
                 </label>
 
-                <label htmlFor="address">
+                {/* <label htmlFor="address">
                     <h3>Address</h3>
                     <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
+                </label> */}
+
+                <label htmlFor="address">
+                    <h3>Your Last Location</h3>
+                    {/* <p><button value={addr} onClick={getLocation} className='user-cancel-btn' >click here </button> to get current location </p> */}
+                    <input type="button" value={addr} onClick={getLocation} />
+                    {/* <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} /> */}
                 </label>
 
                 <br />
                 <input type="submit" value='Save profile' className='user-submit-btn' />
                 <button type='button' className='user-cancel-btn' onClick={() => setSwitch(false)}>Cancel</button>
             </form>
-            <p><button onClick={getLocation} className='user-cancel-btn' >click here </button> to get current location
-            </p>
+            {/* <p><button onClick={getLocation} className='user-cancel-btn' >click here </button> to get current location
+            </p> */}
+            {/* <Map google={this.props.google}
+                style={{ width: "30%", height: "30%" }} zoom={14}>
+
+                <Marker onClick={this.onMarkerClick}
+                    name={'Current location'} />
+
+                <InfoWindow onClose={this.onInfoWindowClose}>
+                    <div>
+                        <h1>{this.state.selectedPlace.name}</h1>
+                    </div>
+                </InfoWindow>
+            </Map> */}
+            {/* <Map
+                google={this.google}
+                zoom={8}
+                style={mapStyles}
+                initialCenter={{ lat: 47.444, lng: -122.176 }}
+            /> */}
         </div>
     )
 }
 
 export default EditProfileForm
+
+// export default GoogleApiWrapper({
+//     apiKey: ("AIzaSyCAPJj-S7hmNRzaCYGu4iueBFq6qBQH4H8")
+// })(EditProfileForm)
