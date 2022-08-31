@@ -26,6 +26,8 @@ const DisplayQComments = ({ question }) => {
             alert('Enter a comment before submitting');
         }
         dispatch(editQComment(id, commentId, commentBody))
+        setSwitch(false); 
+        setCom('');
     }
 
     const User = useSelector((state) => (state.currentUserReducer));
@@ -58,7 +60,8 @@ const DisplayQComments = ({ question }) => {
                         <form onSubmit={(e) => { handleEditComment(e, comment._id) }}>
                             <textarea name="" id="" cols="30" rows="2" onChange = {e => setComment(e.target.value)}></textarea>
                             <input type="submit" className='post-ans-btn' value='Update comment' />
-                            <button type='button' className='user-cancel-btn' onClick={() => {setSwitch(false); setCom('');}}>Cancel</button>
+                            {/* <button type='button' className='user-cancel-btn' onClick={() => {setSwitch(false); setCom('');}}>Cancel llll</button> */}
+                            <button type='button' className='flag-button-cancel' onClick={() => {setSwitch(false); setCom('');}}>Cancel</button>
                         </form>
                         </section>
                       ): (

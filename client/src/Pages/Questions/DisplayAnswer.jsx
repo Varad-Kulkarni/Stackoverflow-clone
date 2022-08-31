@@ -13,6 +13,12 @@ const DisplayAnswer = ({ question, handleShare }) => {
     const User = useSelector((state) => (state.currentUserReducer));
 
     const [Comment, setComment] = useState('')
+    const [flag, setFlag] = useState(false);
+    const [flagButton, setFlagButton] = useState(true);
+
+    const [flag1, setFlag1] = useState('');
+    const [flagButton1, setFlagButton1] = useState('v3');
+    const [varia, setVaria] = useState('');
     const Navigate = useNavigate();
 
     const { id } = useParams();
@@ -29,20 +35,33 @@ const DisplayAnswer = ({ question, handleShare }) => {
 
     const handlePostComment = (e, commentLength, userIda) => {
         e.preventDefault();
-        if(User === null) {
+        if (User === null) {
             alert("login or signup to comment");
             Navigate('/Auth');
         }
         else {
-            if(Comment === '') {
+            if (Comment === '') {
                 alert('Enter a comment before submitting');
             }
             else {
                 // console.log(id+ " " +(commentLength+1)+ " " +Comment + " " + User.result.name)
-                dispatch(postComment({ id, noOfComments: commentLength+1, commentBody: Comment, userCommented: User.result.name, userId: User?.result?._id, commentedOn: Date.now(), answeredId: userIda }))
+                dispatch(postComment({ id, noOfComments: commentLength + 1, commentBody: Comment, userCommented: User.result.name, userId: User?.result?._id, commentedOn: Date.now(), answeredId: userIda }))
+                setFlag(false); 
+                setFlag1(''); 
+                setFlagButton1('v3')
             }
         }
-    } 
+    }
+
+    // const handleFlagTrue = (id) => {
+    //     setFlag(true);
+    //     // setFlag1(id)
+    //     setFlagButton(false);
+    // }
+    // const handleFlagFalse = () => {
+    //     setFlag(false);
+    //     setFlagButton(true);
+    // }
 
     const questionId = id;
 
@@ -94,13 +113,45 @@ const DisplayAnswer = ({ question, handleShare }) => {
                             )
                         }
 
-                        <section className='post-comment-container'>
+                        {/* <button type='button' onClick={handleFlagTrue}>Add comments</button> */}
+                        {/* {
+                            console.log(flagButton1)
+                        }
+                        {console.log(ans._id)} */}
+                        {/* {
+                            (flagButton1 !== varia || flagButton1 === 'This is start') && (
+                                <button type='button' className='flag-button' onClick={() => { setFlag(true); setFlag1(ans._id); setFlagButton(false); setFlagButton1(ans._id); setVaria(ans._id) }}>Add comments</button>
+                            )
+                        } */}
+
+                        {
+                            (flagButton1 !== ans._id || flagButton1 === 'v3') && (
+                                <button type='button' className='flag-button' onClick={() => { setFlag(true); setFlag1(ans._id); setFlagButton1(ans._id) }}>Add comments</button>
+                            )
+                        }
+
+                        {
+                            flag && flag1 === ans._id && (
+                                <section className='post-comment-container'>
+                                    <h5 className="comment-h5">Add Comment</h5>
+                                    <form onSubmit={(e) => { handlePostComment(e, ans.comment.length, ans._id) }}>
+                                        <textarea name="" id="" cols="30" rows="2" onChange={e => setComment(e.target.value)}></textarea>
+                                        <input type="submit" className='post-ans-btn' value='Post Your Comment' />
+                                        {/* <button type='button' className='flag-button-cancel' onClick={() => { setFlag(false); setFlag1(''); setFlagButton(true); setFlagButton1('This is start') }}>Cancel</button> */}
+                                        <button type='button' className='flag-button-cancel' onClick={() => { setFlag(false); setFlag1(''); setFlagButton1('v3') }}>Cancel</button>
+                                    </form>
+                                    {/* <button type='button' className='flag-button' onClick={() => {setFlag(false); setFlag1(''); setFlagButton(true)}}>Cancel</button> */}
+                                </section>
+                            )
+                        }
+
+                        {/* <section className='post-comment-container'>
                             <h5 className="comment-h5">Add Comment</h5>
                             <form onSubmit={(e) => { handlePostComment(e, ans.comment.length, ans._id) }}>
-                                <textarea name="" id="" cols="30" rows="2" onChange = {e => setComment(e.target.value)}></textarea>
+                                <textarea name="" id="" cols="30" rows="2" onChange={e => setComment(e.target.value)}></textarea>
                                 <input type="submit" className='post-ans-btn' value='Post Your Comment' />
                             </form>
-                        </section>
+                        </section> */}
 
                     </div>
                 ))

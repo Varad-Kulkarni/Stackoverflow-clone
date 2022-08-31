@@ -175,3 +175,32 @@
     color: rgb(232, 231, 231); 
     background-color: rgb(235, 235, 235); 
 }
+
+.flag-button{
+    margin-left: 320px;
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    color: blueviolet;
+}
+
+.flag-button:hover{
+    color: #ef8236;
+}
+
+.flag-button-cancel{
+    margin-left: 32px;
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    /* color: blueviolet; */
+    color: #0096df;
+}
+
+.flag-button-cancel:hover{
+    color: black;
+}

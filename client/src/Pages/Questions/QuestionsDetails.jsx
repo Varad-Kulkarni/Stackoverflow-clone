@@ -77,6 +77,10 @@ const QuestionsDetails = () => {
 
     const [Answer, setAnswer] = useState('')
     const [Comments, setComments] = useState('')
+    const [flag, setFlag] = useState(false);
+    const [flag1, setFlag1] = useState('');
+    const [flagButton, setFlagButton] = useState(true);
+    // const [flagButton1, setFlagButton1] = useState('');
     const Navigate = useNavigate();
     const dispatch = useDispatch();
     const User = useSelector((state) => (state.currentUserReducer))
@@ -103,20 +107,23 @@ const QuestionsDetails = () => {
 
     const handlePosComment = (e, commentLength) => {
         e.preventDefault();
-        if(User === null) {
+        if (User === null) {
             alert("login or signup to comment");
             Navigate('/Auth');
         }
         else {
-            if(Comments === '') {
+            if (Comments === '') {
                 alert('Enter a comment before submitting');
             }
             else {
                 // console.log(id+ " " +(commentLength+1)+ " " +Comment + " " + User.result.name)
-                dispatch(postQComment({ id, noOfComment: commentLength+1, commentBody: Comments, userCommented: User.result.name, userId: User?.result?._id, commentedOn: Date.now() }))
+                dispatch(postQComment({ id, noOfComment: commentLength + 1, commentBody: Comments, userCommented: User.result.name, userId: User?.result?._id, commentedOn: Date.now() }))
             }
+            setFlag(false);
+            setFlagButton(true);
+            setFlag1('');
         }
-    } 
+    }
 
     const handleShare = () => {
         copy(url + location.pathname);
@@ -197,11 +204,12 @@ const QuestionsDetails = () => {
                                         </div>
 
                                         {
-                                            question.noOfComment !== 0 && (
+                                            question.comments.length !== 0 && (
                                                 <section>
                                                     <h4 className="comment-h4">
                                                         {/* {ans.noOfComments} comments */}
-                                                        {question.noOfComment} comments
+                                                        {/* {question.noOfComment} comments */}
+                                                        {question.comments.length} comments
                                                     </h4>
                                                     <DisplayQComments key={question._id} question={question} questionId={id} />
 
@@ -209,13 +217,46 @@ const QuestionsDetails = () => {
                                             )
                                         }
 
-                                        <section className='post-comment-container'>
+                                        {
+                                            flagButton && (
+                                                <button type='button' className='flag-button' onClick={() => { setFlag(true); setFlag1(question._id); setFlagButton(false) }}>Add comments</button>
+                                            )
+                                        }
+
+                                        {/* {
+                                            flag && flag1 === ans._id && (
+                                                <section className='post-comment-container'>
+                                                    <h5 className="comment-h5">Add Comment</h5>
+                                                    <form onSubmit={(e) => { handlePosComment(e, ans.comment.length, ans._id) }}>
+                                                        <textarea name="" id="" cols="30" rows="2" onChange={e => setComments(e.target.value)}></textarea>
+                                                        <input type="submit" className='post-ans-btn' value='Post Your Comment' />
+                                                        <button type='button' className='flag-button-cancel' onClick={() => { setFlag(false); setFlag1(''); setFlagButton(true) }}>Cancel</button>
+                                                    </form>
+                                                    <button type='button' className='flag-button' onClick={() => {setFlag(false); setFlag1(''); setFlagButton(true)}}>Cancel</button>
+                                                </section>
+                                            )
+                                        } */}
+
+                                        {
+                                            flag && flag1 === question._id && (
+                                                <section className='post-comment-container'>
+                                                    <h5 className="comment-h5">Add Comment</h5>
+                                                    <form onSubmit={(e) => { handlePosComment(e, question.comments.length) }}>
+                                                        <textarea name="" id="" cols="30" rows="2" onChange={e => setComments(e.target.value)}></textarea>
+                                                        <input type="submit" className='post-ans-btn' value='Post Your Comment' />
+                                                        <button type='button' className='flag-button-cancel' onClick={() => { setFlag(false); setFlag1(''); setFlagButton(true) }}>Cancel</button>
+                                                    </form>
+                                                </section>
+                                            )
+                                        }
+
+                                        {/* <section className='post-comment-container'>
                                             <h5 className="comment-h5">Add Comment</h5>
                                             <form onSubmit={(e) => { handlePosComment(e, question.comments.length) }}>
                                                 <textarea name="" id="" cols="30" rows="2" onChange={e => setComments(e.target.value)}></textarea>
                                                 <input type="submit" className='post-ans-btn' value='Post Your Comment' />
                                             </form>
-                                        </section>
+                                        </section> */}
 
                                     </section>
                                     {
